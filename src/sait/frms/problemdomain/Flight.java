@@ -1,4 +1,4 @@
-package sait.frms.problemdomain;
+package src.sait.frms.problemdomain;
 
 public class Flight {
 	private String code;
@@ -16,11 +16,11 @@ public class Flight {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Flight(String code, String airlineName, String from, String to, String weekday, String time, int seats,
+	public Flight(String code, String from, String to, String weekday, String time, int seats,
 			double costPerSeat) {
 		super();
 		this.code = code;
-		this.airline = airlineName;
+		//this.airline = airlineName;
 		this.from = from;
 		this.to = to;
 		this.weekday = weekday;

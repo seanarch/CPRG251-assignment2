@@ -33,12 +33,11 @@ public class FlightManager {
 		while (in.hasNext()) {
 			String[] fields = in.nextLine().split(",");
 
-			//need to figure out what does the code refer to, so use placeholder first
-			//String code, String airlineName, String from, String to, String weekday, String time, int seats,
-			//double costPerSeat
-			String code = "Placeholder";
+			//Flight Code,Departing Airport Code,Arrival Airport Code,Weekday,Time,Seats,Cost Per Seat
+			//i.e.: CA-8346,YYC,ATL,Thursday,20:15,174,501.00
+			String code = fields[0];
 
-			String airlineName = fields[0];
+			//String airlineName = fields[0];
 			String from = fields[1];
 			String to = fields[2];
 			String weekday = fields[3];
@@ -46,7 +45,7 @@ public class FlightManager {
 			int seats = Integer.parseInt(fields[5]);
 			double costPerSeat = Double.parseDouble(fields[6]);
 
-			flights.add(new Flight(code, airlineName, from, to, weekday, time, seats, costPerSeat));
+			flights.add(new Flight(code,  from, to, weekday, time, seats, costPerSeat));
 
 		}
 		in.close();
