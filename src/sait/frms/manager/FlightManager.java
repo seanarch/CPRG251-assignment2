@@ -19,6 +19,7 @@ public class FlightManager {
 	private ArrayList<Flight> flights;
 	private ArrayList<String> airports;
 	private final String FILE_PATH = "res/flights.csv";
+	private Scanner in;
 	
 	
 	public FlightManager() {
@@ -27,7 +28,7 @@ public class FlightManager {
 	}
 
 	public ArrayList<Flight> getFlights() throws FileNotFoundException {
-		Scanner in = new Scanner(new File(FILE_PATH));
+		in = new Scanner(new File(FILE_PATH));
 
 		while (in.hasNext()) {
 			String[] fields = in.nextLine().split(",");
