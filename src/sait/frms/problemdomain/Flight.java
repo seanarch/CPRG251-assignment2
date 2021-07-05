@@ -20,7 +20,7 @@ public class Flight {
 			double costPerSeat) {
 		super();
 		this.code = code;
-		//this.airline = airlineName;
+		this.airline = code.substring(0,2);
 		this.from = from;
 		this.to = to;
 		this.weekday = weekday;
