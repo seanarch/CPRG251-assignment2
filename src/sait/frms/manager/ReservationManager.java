@@ -40,14 +40,44 @@ public class ReservationManager{
 	/**
 	 * A travel agent can find existing flight reservations using the reservation code, airline, and traveler name. 
 	 * The criteria can match any combination of the three fields.
-	 * @param code
-	 * @param airline
-	 * @param name
-	 * @return
+	 * @param code reservation code searched by client
+	 * @param airline airline name searched by client
+	 * @param name traveler’s full name searched by client
+	 * @return findMatchReservation ArrayList of matching reservation
 	 */
-	public ArrayList<Reservation> findReservations(String code, String airline, String name) {
-		
-	}
+	public ArrayList<Reservation> findReservations(String code, String airline, String name) throws IOException {
+        ArrayList<Reservation> findMatchReservation = new ArrayList<>();
+        final int CHAR_SIZE = 2; // LDDDD : 10 bytes CHAR_SIZE; aireline: 4 bytes eg: OA – Otto Airline; name: 100 bytes
+        boolean endOfFile = true;
+        String codeRecord = "";
+        String airelineRecord = "";
+        String nameRecord = "";
+        // open the file to read
+        RandomAccessFile randomFile = new RandomAccessFile("res/reservations.dat", "r");
+        while (!endOfFile) {
+            try {
+                randomFile.seek(0);
+                codeRecord = randomFile.readUTF();
+                randomFile.seek(CHAR_SIZE * 5);
+                airelineRecord = randomFile.readUTF();
+                randomFile.seek(CHAR_SIZE * 2);
+                nameRecord = randomFile.readUTF();
+
+ 
+
+                for (Reservation r : reservations) {
+                    if (code.toUpperCase() == codeRecord.toUpperCase()
+                            || airline.toUpperCase() == airelineRecord.toUpperCase()
+                            || name.toUpperCase() == nameRecord.toUpperCase()) {
+                        findMatchReservation.add(r);
+                    }
+                }
+            } catch (IOException e) {
+                endOfFile = true;
+            }
+        }
+        return findMatchReservation;
+    }
 	
 	public Reservation findReservationByCode(String code) {
 		
