@@ -8,15 +8,16 @@ import java.util.Scanner;
 import src.sait.frms.problemdomain.*;
 
 public class FlightManager {
-	static final String WEEKDAY_ANY;
-	static final String WEEKDAY_SUNDAY;
-	static final String WEEKDAY_MONDAY;
-	static final String WEEKDAY_TUESDAY;
-	static final String WEEKDAY_WEDNESDAY;
-	static final String WEEKDAY_THURSDAY;
-	static final String WEEKDAY_FRIDAY;
-	static final String WEEKDAY_SATURDAY;
+	static final String WEEKDAY_ANY = "ANY";
+	static final String WEEKDAY_SUNDAY = "Sunday";
+	static final String WEEKDAY_MONDAY = "Monday";
+	static final String WEEKDAY_TUESDAY = "Tuesday";
+	static final String WEEKDAY_WEDNESDAY = "Wednesday";
+	static final String WEEKDAY_THURSDAY = "Thursday";
+	static final String WEEKDAY_FRIDAY = "Friday";
+	static final String WEEKDAY_SATURDAY = "Saturday";
 	private ArrayList<Flight> flights;
+	private ArrayList<Flight> flightsFound;
 	private ArrayList<String> airports;
 	private final String FILE_PATH = "res/flights.csv";
 	private final String FILE_PATH_AIRPORT = "res/airports.csv";
@@ -81,7 +82,22 @@ public class FlightManager {
 	}
 	
 	public ArrayList<Flight> findFlights (String from, String to, String weekday) {
-		
+		if (weekday == WEEKDAY_ANY) {
+			for (Flight f : flights) {
+				if (f.getFrom().equalsIgnoreCase(from) && f.getTo().equalsIgnoreCase(to)) {
+					flightsFound.add(f);
+				}
+			}
+		} else {
+			for (Flight f : flights) {
+				if (f.getFrom().equalsIgnoreCase(from) &&
+						f.getTo().equalsIgnoreCase(to) &&
+						f.getWeekday().equalsIgnoreCase(weekday)) {
+					flightsFound.add(f);
+				}
+			}
+		}
+		return flightsFound;
 	}
 	
 	private void populateFlights() {
