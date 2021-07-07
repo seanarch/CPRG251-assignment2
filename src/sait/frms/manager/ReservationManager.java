@@ -4,19 +4,26 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.lang.String;
 
 import sait.frms.problemdomain.*;
 import sait.frms.manager.*;
+
 public class ReservationManager{
 
-	private final String SAVE_TO_FILE = "res/reservation.txt";
-	private ArrayList<Reservation> reservations;
+	private static final SAVE_TO_FILE = "res/reservation.dat";
+	private static ArrayList<Reservation> reservations;
+	private final MODE = "rw";
+	private RandomAccessFile raf;
 
 	public ReservationManager() throws Exception {
 		reservations = new ArrayList<Reservation>();
+		
+		raf = new RandomAccessFile(SAVE_TO_FILE, MODE);
 	}
 	
 	public Reservation makeReservation(Flight flight, String name, String citizenship) {
+		Reservation r;
 		// check the flight code is valid
 		if (flight.getSeats() > 0 ) {
 			if (name == "") {
@@ -29,7 +36,26 @@ public class ReservationManager{
 				// Reservation record will have Reservation code, Flight code, Airline, Name, Citizenship, Cost, active
 				String generatedCode = generateReservationCode(flight);
 				System.out.println("Reservation created. Your code is " + generatedCode + ".");
-				return new Reservation(generatedCode, flight.getCode(), flight.getAirlineName(), name, citizenship, flight.getCostPerSeat(), false);
+				//write reservation info to binary file 
+				String generatedCodeBinary = String.format("%-5s", generatedCode); //LDDDD (i.e.: I1234) 7 bytes
+				raf.writeUTF(generatedCodeBinary);
+				
+				String flightCodeBinary = String.format("%-7s", flight.getCode()); //LL-DDDD (I.e.: GA-1234) 9 bytes
+				raf.writeUTF(flightCodeBinary);
+				
+				String airLineBinary = String.format("%-100s", flight.getAirlineName());  //102bytes
+				raf.writeUTF(airLineBinary);
+				
+				String nameBinary = String.format("%-100s", name);//102bytes
+				raf.writeUTF(nameBinary);
+				
+				String citizenshipBinary = String.format("%-100s", citizenship);//102bytes
+				raf.writeUTF(citizenshipBinary);
+				
+				raf.writeDouble(flight.getCostPerSeat()); // 8 bytes
+				raf.writeBoolean(false); //1byte
+				r = new Reservation(generatedCode, flight.getCode(), flight.getAirlineName(), name, citizenship, flight.getCostPerSeat(), false);
+				return r;
 			}
 		} else {
 			System.out.println("This flight is not available. No available seats.");
@@ -47,39 +73,40 @@ public class ReservationManager{
 	 */
 	public ArrayList<Reservation> findReservations(String code, String airline, String name) throws IOException {
         ArrayList<Reservation> findMatchReservation = new ArrayList<>();
-        final int CHAR_SIZE = 2; // LDDDD : 10 bytes CHAR_SIZE; aireline: 4 bytes eg: OA – Otto Airline; name: 100 bytes
-        boolean endOfFile = true;
-        String codeRecord = "";
-        String airelineRecord = "";
-        String nameRecord = "";
-        // open the file to read
-        RandomAccessFile randomFile = new RandomAccessFile("res/reservations.dat", "r");
-        while (!endOfFile) {
+        final int RERSERVATION_BYTE_SIZE = 331; 
+        Reservation reservationsRecord;
+
             try {
-                randomFile.seek(0);
-                codeRecord = randomFile.readUTF();
-                randomFile.seek(CHAR_SIZE * 5);
-                airelineRecord = randomFile.readUTF();
-                randomFile.seek(CHAR_SIZE * 2);
-                nameRecord = randomFile.readUTF();
+            	//read record to reservation object   	
+            	for (int position = 0; position < raf.length(); position += RERSERVATION_BYTE_SIZE) {
+            		raf.seek(position);
+            		String generatedCodeBinary = raf.readUTF().trim();
+            		String flightCodeBinary = raf.readUTF().trim();
+            		String airLineBinary = raf.readUTF().trim();
+            		String nameBinary = raf.readUTF().trim();
+            		String citizenshipBinary = raf.readUTF().trim();
+            		double costPerSeat = raf.readDouble();
+            		boolean isActive = raf.readBoolean();
+            		reservationsRecord = new Reservation (generatedCodeBinary,flightCodeBinary,airLineBinary,nameBinary,citizenshipBinary,costPerSeat,isActive);
+            		
 
- 
-
-                for (Reservation r : reservations) {
-                    if (code.toUpperCase() == codeRecord.toUpperCase()
-                            || airline.toUpperCase() == airelineRecord.toUpperCase()
-                            || name.toUpperCase() == nameRecord.toUpperCase()) {
-                        findMatchReservation.add(r);
+                    if (code.toUpperCase() == generatedCodeBinary.toUpperCase()
+                            || airline.toUpperCase() == airLineBinary.toUpperCase()
+                            || name.toUpperCase() == nameBinary.toUpperCase()) {
+                    	findMatchReservation.add(reservationsRecord);
                     }
                 }
             } catch (IOException e) {
-                endOfFile = true;
+               System.out.println("End Of File");
             }
-        }
+        
         return findMatchReservation;
     }
 	
 	public Reservation findReservationByCode(String code) {
+		
+		
+		Reservation findByCode;
 		
 	}
 	
@@ -113,7 +140,7 @@ public class ReservationManager{
 	}
 
 	private void populateFromBinary() {
-		
+
 	}
 
 }
