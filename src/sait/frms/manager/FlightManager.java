@@ -72,7 +72,12 @@ public class FlightManager {
 	}
 	
 	public Flight findFlightByCode(String code) {
-		
+		for (Flight f:flights) {
+			if (f.getCode().equalsIgnoreCase(code)) {
+				return f;
+			}
+		}
+		throw new RuntimeException("The code you input doesn't exist in the system. Please enter a new code and try again.");
 	}
 	
 	public ArrayList<Flight> findFlights (String from, String to, String weekday) {
