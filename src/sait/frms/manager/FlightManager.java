@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import src.sait.frms.problemdomain.*;
+import sait.frms.problemdomain.*;
 
 public class FlightManager {
 	static final String WEEKDAY_ANY = "ANY";
