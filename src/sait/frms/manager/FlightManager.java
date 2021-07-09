@@ -1,4 +1,4 @@
-package src.sait.frms.manager;
+package sait.frms.manager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
