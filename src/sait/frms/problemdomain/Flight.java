@@ -62,7 +62,7 @@ public class Flight {
 	}
 
 	public boolean isDomestic() {
-		if (from.startsWith("Y") || to.startsWith("Y")) {
+		if (from.startsWith("Y") && to.startsWith("Y")) {
 			return true;
 		} else {
 			return false;
