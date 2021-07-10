@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import javax.swing.event.*;
 import sait.frms.manager.FlightManager;
 import sait.frms.manager.ReservationManager;
 import sait.frms.problemdomain.Flight;
+import sait.frms.problemdomain.Reservation;
 
 /**
  * Holds the components for the flights tab.
@@ -43,6 +45,16 @@ public class FlightsTab extends TabBase {
 	JTextArea result;
 	ArrayList<Flight> flightObject = null;
 	ArrayList<String> airportObject = null;
+	Reservation reservations = null;
+	TextField textFlight;
+	TextField textAirline;
+	TextField textDay;
+	TextField textTime; 
+	TextField textCost;
+	TextField textName;
+	TextField textCitizenship;
+
+
 	/**
 	 * Creates the components for flights tab.
 	 */
@@ -83,7 +95,6 @@ public class FlightsTab extends TabBase {
 		c.gridy = 0;
 		gridbag.add(labelFrom, c);
 		comboboxFrom = new JComboBox();
-	
 
 		c.gridx = 1;
 		c.gridy = 0;
@@ -104,11 +115,10 @@ public class FlightsTab extends TabBase {
 			comboboxTo.addItem(ao);
 			comboboxFrom.addItem(ao);
 		}
-		
+
 		c.gridx = 1;
 		c.gridy = 1;
 		gridbag.add(comboboxTo, c);
-
 
 		JLabel labelDay = new JLabel("Day:");
 		c.gridx = 0;
@@ -150,7 +160,7 @@ public class FlightsTab extends TabBase {
 		c.gridy = 0;
 		gridbag.add(labelFlight, c);
 
-		TextField textFlight = new TextField(10);
+		textFlight = new TextField(10);
 		textFlight.setEditable(false);
 		c.gridx = 1;
 		c.gridy = 0;
@@ -161,7 +171,7 @@ public class FlightsTab extends TabBase {
 		c.gridy = 1;
 		gridbag.add(labelAirline, c);
 
-		TextField textAirline = new TextField(10);
+		textAirline = new TextField(10);
 		textAirline.setEditable(false);
 		c.gridx = 1;
 		c.gridy = 1;
@@ -172,7 +182,7 @@ public class FlightsTab extends TabBase {
 		c.gridy = 2;
 		gridbag.add(labelDay, c);
 
-		TextField textDay = new TextField(10);
+		textDay = new TextField(10);
 		textDay.setEditable(false);
 		c.gridx = 1;
 		c.gridy = 2;
@@ -183,7 +193,7 @@ public class FlightsTab extends TabBase {
 		c.gridy = 3;
 		gridbag.add(labelTime, c);
 
-		TextField textTime = new TextField(10);
+		textTime = new TextField(10);
 		textTime.setEditable(false);
 		c.gridx = 1;
 		c.gridy = 3;
@@ -194,7 +204,7 @@ public class FlightsTab extends TabBase {
 		c.gridy = 4;
 		gridbag.add(labelCost, c);
 
-		TextField textCost = new TextField(10);
+		textCost = new TextField(10);
 		textCost.setEditable(false);
 		c.gridx = 1;
 		c.gridy = 4;
@@ -205,7 +215,7 @@ public class FlightsTab extends TabBase {
 		c.gridy = 5;
 		gridbag.add(labelName, c);
 
-		TextField textName = new TextField(10);
+		textName = new TextField(10);
 		c.gridx = 1;
 		c.gridy = 5;
 		gridbag.add(textName, c);
@@ -215,14 +225,16 @@ public class FlightsTab extends TabBase {
 		c.gridy = 6;
 		gridbag.add(labelCitizenship, c);
 
-		TextField textCitizenship = new TextField();
+		textCitizenship = new TextField();
 		c.gridx = 1;
 		c.gridy = 6;
 		gridbag.add(textCitizenship, c);
 
 		panel.add(gridbag, BorderLayout.CENTER);
 
-		panel.add(new JButton("Reserve"), BorderLayout.SOUTH);
+		JButton reserveButton = new JButton("Reserve");
+		panel.add(reserveButton, BorderLayout.SOUTH);
+		reserveButton.addActionListener(new ReserveButtonListener());
 
 		return panel;
 	}
@@ -254,7 +266,7 @@ public class FlightsTab extends TabBase {
 
 		flightsModel = new DefaultListModel<>();
 		flightsList = new JList<>(flightsModel);
-
+		
 		// User can only select one item at a time.
 		flightsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -265,7 +277,6 @@ public class FlightsTab extends TabBase {
 
 		textArea.add(scrollPane);
 
-	
 		return textArea;
 	}
 
@@ -275,7 +286,11 @@ public class FlightsTab extends TabBase {
 		 */
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-
+			textFlight.setText(flightsList.getSelectedValue().getCode());
+			textAirline.setText(flightsList.getSelectedValue().getAirlineName());
+			textDay.setText(flightsList.getSelectedValue().getWeekday());
+			textTime.setText(flightsList.getSelectedValue().getTime());
+			textCost.setText("$"+flightsList.getSelectedValue().getCostPerSeat()); 
 		}
 
 	}
@@ -287,7 +302,8 @@ public class FlightsTab extends TabBase {
 			String flightFrom = (String) comboboxFrom.getSelectedItem();
 			String flightTo = (String) comboboxTo.getSelectedItem();
 			String flightDay = (String) comboboxDay.getSelectedItem();
-
+			result = new JTextArea();
+			
 			try {
 				flightObject = flightManager.getFlights();
 			} catch (FileNotFoundException e1) {
@@ -296,15 +312,35 @@ public class FlightsTab extends TabBase {
 			}
 
 			for (Flight fo : flightObject) {
-				result = new JTextArea();
-				if(fo.getFrom()==flightFrom && fo.getTo() == flightTo && fo.getWeekday() ==flightDay) {
+				
+				if (fo.getFrom() == flightFrom && fo.getTo() == flightTo && fo.getWeekday() == flightDay) {
 					flightsModel.addElement(fo);
-					//flightsList = new JList(flightsModel);
-					//result.setText(fo.toString());
-					//textArea.add(result);
-					
+					result.setText(fo.toString());
+					textArea.add(result);			
 				}
+							
+				flightsList.setModel(flightsModel);
+				
 			}
 		}
 	}
+	
+	private class ReserveButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			String flightCode = textFlight.getText();
+			String name = textName.getText();
+			String citizenship = textCitizenship.getText();
+			try {
+				reservations = reservationManager.makeReservation(flightsList.getSelectedValue(), name, citizenship);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			JOptionPane.showMessageDialog(null, "Reservation created. Your code is "+ reservations.getCode());
+		}
+	}
+
 }
