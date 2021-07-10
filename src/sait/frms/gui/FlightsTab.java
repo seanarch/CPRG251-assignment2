@@ -21,6 +21,14 @@ import sait.frms.problemdomain.Reservation;
  * 
  */
 public class FlightsTab extends TabBase {
+	static final String WEEKDAY_ANY = "Any";
+	static final String WEEKDAY_SUNDAY = "Sunday";
+	static final String WEEKDAY_MONDAY = "Monday";
+	static final String WEEKDAY_TUESDAY = "Tuesday";
+	static final String WEEKDAY_WEDNESDAY = "Wendesday";
+	static final String WEEKDAY_THURSDAY = "Thursday";
+	static final String WEEKDAY_FRIDAY = "Friday";
+	static final String WEEKDAY_SATURDAY = "Staturday";
 	/**
 	 * Instance of flight manager.
 	 */
@@ -88,22 +96,27 @@ public class FlightsTab extends TabBase {
 		JPanel gridbag = new JPanel();
 		gridbag.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
 
 		JLabel labelFrom = new JLabel("From:");
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.weightx = 0.05;
 		gridbag.add(labelFrom, c);
+		
 		comboboxFrom = new JComboBox();
-
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 0;
+		c.weightx = 0.95;
 		gridbag.add(comboboxFrom, c);
 
 		JLabel labelTo = new JLabel("To:");
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		gridbag.add(labelTo, c);
+		c.weightx = 0.05;
+		
 		comboboxTo = new JComboBox();
 		try {
 			airportObject = flightManager.getAirports();
@@ -116,19 +129,26 @@ public class FlightsTab extends TabBase {
 			comboboxFrom.addItem(ao);
 		}
 
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 1;
+		c.weightx = 0.95;
 		gridbag.add(comboboxTo, c);
 
 		JLabel labelDay = new JLabel("Day:");
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 2;
+		c.weightx = 0.05;
 		gridbag.add(labelDay, c);
 
-		String[] Day = { "Any", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+		String [] Day = {WEEKDAY_ANY, WEEKDAY_SUNDAY, WEEKDAY_MONDAY, WEEKDAY_TUESDAY, WEEKDAY_WEDNESDAY, WEEKDAY_THURSDAY, WEEKDAY_FRIDAY, WEEKDAY_SATURDAY};
+
 		comboboxDay = new JComboBox(Day);
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 2;
+		c.weightx = 0.95;
 		gridbag.add(comboboxDay, c);
 
 		panel.add(gridbag, BorderLayout.CENTER);

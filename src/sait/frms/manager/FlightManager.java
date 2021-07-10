@@ -1,10 +1,7 @@
 package sait.frms.manager;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
-
+import java.io.*;
+import java.util.*;
 import sait.frms.problemdomain.*;
 
 public class FlightManager {
