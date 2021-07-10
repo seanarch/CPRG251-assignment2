@@ -64,8 +64,8 @@ public class FlightManager {
 		while (in.hasNext()) {
 			String[] fields = in.nextLine().split(",");
 			String code = fields[0];
-			//String airport = fields[1];
-			//String line = code + "," + airport;			
+			String airport = fields[1];
+			String line = code + "," + airport;			
 			airports.add(code);
 		}
 		in.close();

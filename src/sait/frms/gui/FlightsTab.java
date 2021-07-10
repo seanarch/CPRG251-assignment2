@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -61,6 +62,7 @@ public class FlightsTab extends TabBase {
 	TextField textCost;
 	TextField textName;
 	TextField textCitizenship;
+	JScrollPane scrollPane;
 
 
 	/**
@@ -292,11 +294,12 @@ public class FlightsTab extends TabBase {
 		flightsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// Wrap JList in JScrollPane so it is scrollable.
-		JScrollPane scrollPane = new JScrollPane(this.flightsList);
+		scrollPane = new JScrollPane(this.flightsList);
 
 		flightsList.addListSelectionListener(new MyListSelectionListener());
 
 		textArea.add(scrollPane);
+		
 
 		return textArea;
 	}
@@ -323,8 +326,8 @@ public class FlightsTab extends TabBase {
 			String flightFrom = (String) comboboxFrom.getSelectedItem();
 			String flightTo = (String) comboboxTo.getSelectedItem();
 			String flightDay = (String) comboboxDay.getSelectedItem();
-			result = new JTextArea();
-			
+			 result = new JTextArea();
+						
 			try {
 				flightObject = flightManager.getFlights();
 			} catch (FileNotFoundException e1) {
@@ -333,17 +336,18 @@ public class FlightsTab extends TabBase {
 			}
 
 			for (Flight fo : flightObject) {
-				
-				if (fo.getFrom() == flightFrom && fo.getTo() == flightTo && fo.getWeekday() == flightDay) {
+				if( fo.getFrom().equals(flightFrom) && fo.getTo().equals(flightTo) && fo.getWeekday().equals(flightDay)) {
 					flightsModel.addElement(fo);
-					result.setText(fo.toString());
-					textArea.add(result);			
+
 				}
-							
-				flightsList.setModel(flightsModel);
+				else if (flightDay.equals(WEEKDAY_ANY) && fo.getFrom().equals(flightFrom) && fo.getTo().equals(flightTo)) {
+					flightsModel.addElement(fo);
+				}
 				
 			}
+
 		}
+		
 	}
 	
 	private class ReserveButtonListener implements ActionListener{

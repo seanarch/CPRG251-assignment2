@@ -75,15 +75,7 @@ public class Flight {
 
 	@Override
 	public String toString() {
-		return "Flight{" +
-				"code='" + code + '\'' +
-				", airline='" + airline + '\'' +
-				", from='" + from + '\'' +
-				", to='" + to + '\'' +
-				", weekday='" + weekday + '\'' +
-				", time='" + time + '\'' +
-				", seats=" + seats +
-				", costPerSeat=" + costPerSeat +
-				'}';
+		return  this.code + ", From:" + this.from + ", To:" +
+				 this.to+ ", Day:" + this.weekday +", Cost:" + this.costPerSeat;
 	}
 }
