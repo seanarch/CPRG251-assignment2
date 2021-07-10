@@ -35,7 +35,7 @@ public class ReservationManager{
 				System.out.println("Reservation created. Your code is " + generatedCode + ".");
 				
 				// Available seat - 1
-				flight = new Flight(flight.getCode(), flight.getAirlineName(), flight.getFrom(), flight.getTo(), flight.getWeekday(), flight.getTime(), this.getAvailableSeats(flight)-1, flight.getCostPerSeat());
+				flight = new Flight(flight.getCode(), flight.getFrom(), flight.getTo(), flight.getWeekday(), flight.getTime(), this.getAvailableSeats(flight)-1, flight.getCostPerSeat());
 				Reservation rsv = new Reservation(generatedCode, flight.getCode(), flight.getAirlineName(), name,
 						citizenship, flight.getCostPerSeat(), false);
 				

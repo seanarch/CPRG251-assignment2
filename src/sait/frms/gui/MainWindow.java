@@ -71,7 +71,12 @@ public class MainWindow extends JFrame
 	 */
 	public MainWindow() {
 		this.flightManager = new FlightManager();
-		this.reservationManager = new ReservationManager();
+		try {
+			this.reservationManager = new ReservationManager();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		setTitle("Flight Reservation Management System");
 		
