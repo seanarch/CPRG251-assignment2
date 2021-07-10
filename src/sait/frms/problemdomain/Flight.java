@@ -62,14 +62,28 @@ public class Flight {
 	}
 
 	public boolean isDomestic() {
-		
+		if (from.startsWith("Y") || to.startsWith("Y")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	private void parseCode(String code) {
 		
 	}
-	
+
+	@Override
 	public String toString() {
-		
+		return "Flight{" +
+				"code='" + code + '\'' +
+				", airline='" + airline + '\'' +
+				", from='" + from + '\'' +
+				", to='" + to + '\'' +
+				", weekday='" + weekday + '\'' +
+				", time='" + time + '\'' +
+				", seats=" + seats +
+				", costPerSeat=" + costPerSeat +
+				'}';
 	}
 }
