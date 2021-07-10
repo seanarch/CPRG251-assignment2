@@ -116,6 +116,7 @@ public class FlightsTab extends TabBase {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 0.05;
+		gridbag.add(labelTo, c);
 		
 		comboboxTo = new JComboBox();
 		try {
