@@ -13,9 +13,9 @@ public class FlightManager {
 	static final String WEEKDAY_THURSDAY = "Thursday";
 	static final String WEEKDAY_FRIDAY = "Friday";
 	static final String WEEKDAY_SATURDAY = "Saturday";
-	private ArrayList<Flight> flights = new ArrayList<>();
+	private ArrayList<Flight> flights;
 	private ArrayList<Flight> flightsFound = new ArrayList<>();
-	private ArrayList<String> airports = new ArrayList<>();
+	private ArrayList<String> airports;
 	private final String FILE_PATH = "res/flights.csv";
 	private final String FILE_PATH_AIRPORT = "res/airports.csv";
 	private Scanner in;
@@ -25,8 +25,12 @@ public class FlightManager {
 		super();
 		// TODO Auto-generated constructor stub
 		try {
-			getFlights();
-			getAirports();
+			//getFlights();
+			//getAirports();
+			flights = new ArrayList<>();
+			airports = new ArrayList<>();
+			populateFlights();
+			populateAirports();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,6 +38,7 @@ public class FlightManager {
 	}
 
 	public ArrayList<Flight> getFlights() throws FileNotFoundException {
+		/*
 		in = new Scanner(new File(FILE_PATH));
 
 		while (in.hasNext()) {
@@ -55,10 +60,12 @@ public class FlightManager {
 
 		}
 		in.close();
+		*/
 		return flights;
 	}
 
 	public ArrayList<String> getAirports() throws FileNotFoundException {
+		/*
 		in = new Scanner(new File(FILE_PATH_AIRPORT));
 
 		while (in.hasNext()) {
@@ -69,6 +76,7 @@ public class FlightManager {
 			airports.add(code);
 		}
 		in.close();
+		*/
 		return airports;
 	}
 	
