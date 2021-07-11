@@ -362,13 +362,19 @@ public class FlightsTab extends TabBase {
 			String flightCode = textFlight.getText();
 			String name = textName.getText();
 			String citizenship = textCitizenship.getText();
-			try {
+			//client name & citizenship cannot be empty
+			if(!name.isEmpty()&&!citizenship.isEmpty(){
+				try {
 				reservations = reservationManager.makeReservation(flightsList.getSelectedValue(), name, citizenship);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			JOptionPane.showMessageDialog(null, "Reservation created. Your code is "+ reservations.getCode());
+			}else{
+				JOptionPane.showMessageDialog(null, "Name and Citizenship can not be empty, Please enter again");
+			}
+			
 		}
 	}
 
