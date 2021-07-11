@@ -335,13 +335,17 @@ public class FlightsTab extends TabBase {
 				e1.printStackTrace();
 			}
 
+			flightsModel.removeAllElements();
 			for (Flight fo : flightObject) {
-				if( fo.getFrom().equals(flightFrom) && fo.getTo().equals(flightTo) && fo.getWeekday().equals(flightDay)) {
-					flightsModel.addElement(fo);
-
+				if (flightDay.equals(WEEKDAY_ANY)) {
+					if (flightDay.equals(WEEKDAY_ANY) && fo.getFrom().equals(flightFrom) && fo.getTo().equals(flightTo)) {
+						flightsModel.addElement(fo);
+					}
 				}
-				else if (flightDay.equals(WEEKDAY_ANY) && fo.getFrom().equals(flightFrom) && fo.getTo().equals(flightTo)) {
-					flightsModel.addElement(fo);
+				else {
+					if( fo.getFrom().equals(flightFrom) && fo.getTo().equals(flightTo) && fo.getWeekday().equals(flightDay)) {
+						flightsModel.addElement(fo);
+					}
 				}
 				
 			}
