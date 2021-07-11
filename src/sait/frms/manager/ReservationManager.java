@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import sait.frms.problemdomain.*;
 import sait.frms.manager.*;
 
-public class ReservationManager{
+public class ReservationManager {
 
 	private static final String SAVE_TO_FILE = "res/reservation.dat";
 	private static ArrayList<Reservation> reservations;
@@ -16,6 +16,7 @@ public class ReservationManager{
 	public ReservationManager() throws Exception {
 		reservations = new ArrayList<Reservation>();
 		populateFromBinary();
+
 		raf = new RandomAccessFile(SAVE_TO_FILE, MODE);
 	}
 
@@ -33,12 +34,13 @@ public class ReservationManager{
 				// Citizenship, Cost, active
 				String generatedCode = generateReservationCode(flight);
 				System.out.println("Reservation created. Your code is " + generatedCode + ".");
-				
+
 				// Available seat - 1
-				flight = new Flight(flight.getCode(), flight.getFrom(), flight.getTo(), flight.getWeekday(), flight.getTime(), this.getAvailableSeats(flight)-1, flight.getCostPerSeat());
+				flight = new Flight(flight.getCode(), flight.getFrom(), flight.getTo(), flight.getWeekday(),
+						flight.getTime(), this.getAvailableSeats(flight) - 1, flight.getCostPerSeat());
 				Reservation rsv = new Reservation(generatedCode, flight.getCode(), flight.getAirlineName(), name,
 						citizenship, flight.getCostPerSeat(), false);
-				
+
 				// write reservation info to binary file
 				reservations.add(rsv);
 				persist();
@@ -62,47 +64,23 @@ public class ReservationManager{
 	 */
 	public ArrayList<Reservation> findReservations(String code, String airline, String name) throws IOException {
 		ArrayList<Reservation> findMatchReservation = new ArrayList<>();
-		Reservation reservationsRecord;
 
-		try {
-			// read record to reservation object
-			for (int position = 0; position < raf.length(); position += RERSERVATION_BYTE_SIZE) {
-				raf.seek(position);
-				String generatedCodeBinary = raf.readUTF().trim();
-				String flightCodeBinary = raf.readUTF().trim();
-				String airLineBinary = raf.readUTF().trim();
-				String nameBinary = raf.readUTF().trim();
-				String citizenshipBinary = raf.readUTF().trim();
-				double costPerSeat = raf.readDouble();
-				boolean isActive = raf.readBoolean();
-				reservationsRecord = new Reservation(generatedCodeBinary, flightCodeBinary, airLineBinary, nameBinary,
-						citizenshipBinary, costPerSeat, isActive);
 
-				if (code.toUpperCase() == generatedCodeBinary.toUpperCase()
-						|| airline.toUpperCase() == airLineBinary.toUpperCase()
-						|| name.toUpperCase() == nameBinary.toUpperCase()) {
-					findMatchReservation.add(reservationsRecord);
-				}
+		for (Reservation r : reservations) {
+			if (r.getCode().equals(code.toUpperCase()) || r.getAirline().equals(airline.toUpperCase()) || r.getName().toUpperCase().equals(name)) {
+				findMatchReservation.add(r);
+				//System.out.println(r);
 			}
-		} catch (IOException e) {
-			System.out.println("End Of File");
 		}
-
 		return findMatchReservation;
 	}
 
 	public Reservation findReservationByCode(String code) {
-		try {
-			raf.seek(0);
-			for (long position = 0; position < this.raf.length(); position += RERSERVATION_BYTE_SIZE) {
-				if (this.raf.readUTF().trim().equals(code)) {
-					return new Reservation(this.raf.readUTF().trim(), this.raf.readUTF().trim(),
-							this.raf.readUTF().trim(), this.raf.readUTF().trim(), this.raf.readUTF().trim(),
-							this.raf.readDouble(), this.raf.readBoolean());
-				}
+		for (Reservation r : reservations) {
+			if (r.getCode().equals(code)) {
+				return r;
+				// System.out.println(r);
 			}
-		} catch (IOException e) {
-			System.out.println("End Of File");
 		}
 		return null;
 	}
@@ -137,7 +115,7 @@ public class ReservationManager{
 
 	/**
 	 * The travel agent can make a flight reservation for a traveler. A reservation
-	 * code will be generated and assigned to the traveler’s name and citizenship.
+	 * code will be generated and assigned to the travelerâ€™s name and citizenship.
 	 * The reservation code must use the format LDDDD, where L is either D for
 	 * Domestic or I for International and DDDD is a random number between 1000 and
 	 * 9999.
@@ -157,25 +135,28 @@ public class ReservationManager{
 	}
 
 	private void populateFromBinary() throws IOException {
-		boolean endOfFile = false;
-		while (!endOfFile) {
-			try {
-				for (int position = 0; position < raf.length(); position += RERSERVATION_BYTE_SIZE) {
-					raf.seek(position);
-					String generatedCodeBinary = raf.readUTF().trim();
-					String flightCodeBinary = raf.readUTF().trim();
-					String airLineBinary = raf.readUTF().trim();
-					String nameBinary = raf.readUTF().trim();
-					String citizenshipBinary = raf.readUTF().trim();
-					double costPerSeat = raf.readDouble();
-					reservations.add(new Reservation(generatedCodeBinary, flightCodeBinary, airLineBinary, nameBinary,
-							citizenshipBinary, costPerSeat, true));
-				}
-			} catch (Exception e) {
-				endOfFile = true;
+		DataInputStream in = null;
+		try {
+			in = new DataInputStream(new FileInputStream(SAVE_TO_FILE));
+			boolean endOfFile = false;
+
+			while (!endOfFile) {
+				String generatedCodeBinary = in.readUTF().trim();
+				String flightCodeBinary = in.readUTF().trim();
+				String airLineBinary = in.readUTF().trim();
+				String nameBinary = in.readUTF().trim();
+				String citizenshipBinary = in.readUTF().trim();
+				double costPerSeat = in.readDouble();
+				in.readBoolean(); // boolean part
+				reservations.add(new Reservation(generatedCodeBinary, flightCodeBinary, airLineBinary, nameBinary,
+						citizenshipBinary, costPerSeat, true));
 			}
-
+		} catch (FileNotFoundException e) {
+			// The reservation records haven't created and saved into a binary file.
+		} catch (EOFException e) {
+			// endOfFile = true;
+			in.close();
 		}
-	}
 
+	}
 }
