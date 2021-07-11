@@ -3,8 +3,12 @@ package sait.frms.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -40,7 +44,9 @@ public class ReservationsTab extends TabBase {
 	TextField textcitizenship;
 	JComboBox textStatus;
 	ArrayList<Reservation> reservationsRecord = new ArrayList<>();
-	Reservation reservationbyCodeRecord;
+	Reservation reservationbyCodeRecord = new Reservation();
+	ArrayList<Flight> flights = new ArrayList<>();
+	private final String FILE_PATH = "res/flights.csv";
 
 	private JPanel createSouthPanel() {
 		JPanel panel = new JPanel();
@@ -184,8 +190,9 @@ public class ReservationsTab extends TabBase {
 		gridbag.add(textStatus, c);
 
 		panel.add(gridbag, BorderLayout.CENTER);
-
-		panel.add(new JButton("Update"), BorderLayout.SOUTH);
+		JButton updateButton = new JButton("Update");
+		panel.add(updateButton, BorderLayout.SOUTH);
+		updateButton.addActionListener(new UpdateButtonListener());
 
 		return panel;
 	}
@@ -273,20 +280,67 @@ public class ReservationsTab extends TabBase {
 			String reservationCode = textCode.getText().toUpperCase();
 			String airline = textAirlineSearch.getText().toUpperCase();
 			String name = textName.getText().toUpperCase();
-
-			try {
-				reservationsRecord = reservationManager.findReservations(reservationCode, airline, name);
-				for (Reservation rr : reservationsRecord) {
-					reservationsModel.addElement(rr);
-					System.out.println(rr);
+			if (airline.isEmpty() && name.isEmpty()) {
+				reservationbyCodeRecord = reservationManager.findReservationByCode(reservationCode);
+				reservationsModel.addElement(reservationbyCodeRecord);
+			} else {
+				try {
+					reservationsRecord = reservationManager.findReservations(reservationCode, airline, name);
+					for (Reservation rr : reservationsRecord) {
+						reservationsModel.addElement(rr);
+						System.out.println(rr);
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
+
+		}
+
+	}
+
+	private class UpdateButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String reservationCode = textCode.getText().toUpperCase();
+			String name = textNameEdit.getText().toUpperCase();
+			String citizenship = textcitizenship.getText().toUpperCase();
+			String flightCode = textFlight.getText().toUpperCase();
+			if (!name.isEmpty() && !citizenship.isEmpty()) {
+				reservationbyCodeRecord = reservationManager.findReservationByCode(reservationCode);
+				reservationbyCodeRecord.setName(name);
+				reservationbyCodeRecord.setCitizenship(citizenship);
+				if (textStatus.getSelectedItem().equals("Active")) {
+					reservationbyCodeRecord.setActive(true);
+				} else { 
+					//inactive as a soft delete, 
+					//the cancelled reservation will not be included in the number of seats used on a flight
+					reservationbyCodeRecord.setActive(false);
+					for (Flight f : flights) {
+						if (f.getCode().toUpperCase().equals(flightCode)) {
+							f = new Flight(f.getCode(), f.getFrom(), f.getTo(), f.getWeekday(), f.getTime(),
+									f.getSeats() + 1, f.getCostPerSeat());
+						}
+					}
+					try {
+						
+						//update reservation record to binary file
+						reservationManager.persist();
+						System.out.println("Updated Successfully!");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Name and Citizenship can not be empty, Please enter again");
+
+			}
+
 		}
 
 	}
 
 }
-
