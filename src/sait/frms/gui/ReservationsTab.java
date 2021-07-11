@@ -261,7 +261,7 @@ public class ReservationsTab extends TabBase {
 			textCost.setText("$" + reservationsList.getSelectedValue().getCost());
 			textNameEdit.setText(reservationsList.getSelectedValue().getName());
 			textcitizenship.setText(reservationsList.getSelectedValue().getCitizenship());
-			if (reservationsList.getSelectedValue().isActive()) {
+			if (reservationsList.getSelectedValue().isActive() == true) {
 				textStatus.setSelectedItem("Active");
 
 			} else {
@@ -313,25 +313,28 @@ public class ReservationsTab extends TabBase {
 				reservationbyCodeRecord.setCitizenship(citizenship);
 				if (textStatus.getSelectedItem().equals("Active")) {
 					reservationbyCodeRecord.setActive(true);
-				} else { 
-					//inactive as a soft delete, 
-					//the cancelled reservation will not be included in the number of seats used on a flight
+				} else {
+					// inactive as a soft delete,
+					// the cancelled reservation will not be included in the number of seats used on
+					// a flight
 					reservationbyCodeRecord.setActive(false);
 					for (Flight f : flights) {
 						if (f.getCode().toUpperCase().equals(flightCode)) {
 							f = new Flight(f.getCode(), f.getFrom(), f.getTo(), f.getWeekday(), f.getTime(),
 									f.getSeats() + 1, f.getCostPerSeat());
+
 						}
 					}
-					try {
-						
-						//update reservation record to binary file
-						reservationManager.persist();
-						System.out.println("Updated Successfully!");
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				}
+				try {
+
+					// update reservation record to binary file
+					reservationManager.persist();
+					System.out.println("Updated Successfully!");
+					JOptionPane.showMessageDialog(null, "Updated Successfully!");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Name and Citizenship can not be empty, Please enter again");
