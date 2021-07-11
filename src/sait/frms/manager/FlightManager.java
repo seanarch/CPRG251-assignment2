@@ -73,7 +73,12 @@ public class FlightManager {
 	}
 	
 	public String findAirportByCode(String code) {
-		
+		for (int i = 0; i < airports.size(); i++) {
+			if (airports.get(i).equals(code)) {
+				return airports.get(i+1);
+			}
+		}
+		return "";
 	}
 	
 	public Flight findFlightByCode(String code) {
@@ -104,11 +109,29 @@ public class FlightManager {
 		return flightsFound;
 	}
 	
-	private void populateFlights() {
-		
+	private void populateFlights() throws FileNotFoundException {
+		Scanner in = new Scanner(new File(FILE_PATH));
+		while (in.hasNext()) {
+			String[] fields = in.nextLine().split(",");
+			String code = fields[0];
+			String from = fields[1];
+			String to = fields[2];
+			String weekday = fields[3];
+			String time = fields[4];
+			int seats = Integer.parseInt(fields[5]);
+			double costPerSeat = Double.parseDouble(fields[6]);
+			flights.add(new Flight(code, from, to, weekday, time, seats, costPerSeat));
+		}
 	}
 	
-	private void populateAirports() {
-		
+	private void populateAirports() throws FileNotFoundException {
+		Scanner in = new Scanner(new File(FILE_PATH_AIRPORT));
+		while (in.hasNext()) {
+			String[] fields = in.nextLine().split(",");
+			String code = fields[0];
+			airports.add(code);
+			//String airport = fields[1];
+			//airports.add(airport);
+		}
 	}
 }
