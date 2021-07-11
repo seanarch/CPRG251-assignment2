@@ -22,6 +22,7 @@ public class ReservationManager {
 
 	public Reservation makeReservation(Flight flight, String name, String citizenship) throws IOException {
 		// check the flight code is valid
+
 		if (this.getAvailableSeats(flight) > 0) {
 			if (name == "") {
 				System.out.println("Name is required");
@@ -65,11 +66,11 @@ public class ReservationManager {
 	public ArrayList<Reservation> findReservations(String code, String airline, String name) throws IOException {
 		ArrayList<Reservation> findMatchReservation = new ArrayList<>();
 
-
 		for (Reservation r : reservations) {
-			if (r.getCode().toUpperCase().equals(code) || r.getAirline().toUpperCase().equals(airline) || r.getName().toUpperCase().equals(name)) {
+			if (r.getCode().toUpperCase().equals(code) || r.getAirline().toUpperCase().equals(airline)
+					|| r.getName().toUpperCase().equals(name)) {
 				findMatchReservation.add(r);
-				//System.out.println(r);
+				// System.out.println(r);
 			}
 		}
 		return findMatchReservation;
@@ -147,9 +148,9 @@ public class ReservationManager {
 				String nameBinary = in.readUTF().trim();
 				String citizenshipBinary = in.readUTF().trim();
 				double costPerSeat = in.readDouble();
-				in.readBoolean(); // boolean part
+				boolean isActive = in.readBoolean(); // boolean part
 				reservations.add(new Reservation(generatedCodeBinary, flightCodeBinary, airLineBinary, nameBinary,
-						citizenshipBinary, costPerSeat, true));
+						citizenshipBinary, costPerSeat, isActive));
 			}
 		} catch (FileNotFoundException e) {
 			// The reservation records haven't created and saved into a binary file.
