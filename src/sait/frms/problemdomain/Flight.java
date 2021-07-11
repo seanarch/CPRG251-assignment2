@@ -9,7 +9,10 @@ public class Flight {
 	private String time;
 	private int seats;
 	private double costPerSeat;
-	
+	static final String AIRLINE_NAME_OA = "Otto Airlines";
+	static final String AIRLINE_NAME_CA = "Conned Air";
+	static final String AIRLINE_NAME_TB = "Try a Bus Airways";
+	static final String AIRLINE_NAME_VA = "Vertical Airways";
 	
 	public Flight() {
 		super();
@@ -20,7 +23,6 @@ public class Flight {
 			double costPerSeat) {
 		super();
 		this.code = code;
-		this.airline = code.substring(0,2);
 		this.from = from;
 		this.to = to;
 		this.weekday = weekday;
@@ -34,6 +36,7 @@ public class Flight {
 	}
 
 	public String getAirlineName() {
+		parseCode(this.code);
 		return airline;
 	}
 
@@ -70,7 +73,23 @@ public class Flight {
 	}
 	
 	private void parseCode(String code) {
-		
+		switch(this.code.split("-")[0]) {
+		case "OA":
+			this.airline = AIRLINE_NAME_OA;
+			break;
+		case "CA":
+			this.airline = AIRLINE_NAME_CA;
+			break;
+		case "TB":
+			this.airline = AIRLINE_NAME_TB;
+			break;
+		case "VA":
+			this.airline = AIRLINE_NAME_VA;
+			break;
+		default:
+			// Invalid code
+			break;
+		}
 	}
 
 	@Override
