@@ -39,7 +39,7 @@ public class ReservationManager {
 				flight = new Flight(flight.getCode(), flight.getFrom(), flight.getTo(), flight.getWeekday(),
 						flight.getTime(), this.getAvailableSeats(flight) - 1, flight.getCostPerSeat());
 				Reservation rsv = new Reservation(generatedCode, flight.getCode(), flight.getAirlineName(), name,
-						citizenship, flight.getCostPerSeat(), false);
+						citizenship, flight.getCostPerSeat(), true);
 
 				// write reservation info to binary file
 				reservations.add(rsv);
