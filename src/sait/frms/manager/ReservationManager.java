@@ -67,7 +67,7 @@ public class ReservationManager {
 
 
 		for (Reservation r : reservations) {
-			if (r.getCode().equals(code.toUpperCase()) || r.getAirline().equals(airline.toUpperCase()) || r.getName().toUpperCase().equals(name)) {
+			if (r.getCode().toUpperCase().equals(code) || r.getAirline().toUpperCase().equals(airline) || r.getName().toUpperCase().equals(name)) {
 				findMatchReservation.add(r);
 				//System.out.println(r);
 			}
