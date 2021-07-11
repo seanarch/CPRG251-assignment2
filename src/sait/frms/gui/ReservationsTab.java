@@ -46,7 +46,6 @@ public class ReservationsTab extends TabBase {
 	ArrayList<Reservation> reservationsRecord = new ArrayList<>();
 	Reservation reservationbyCodeRecord = new Reservation();
 	ArrayList<Flight> flights = new ArrayList<>();
-	private final String FILE_PATH = "res/flights.csv";
 
 	private JPanel createSouthPanel() {
 		JPanel panel = new JPanel();
