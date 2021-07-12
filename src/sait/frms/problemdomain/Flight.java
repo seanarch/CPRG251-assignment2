@@ -31,39 +31,75 @@ public class Flight {
 		this.costPerSeat = costPerSeat;
 	}
 
+	/**
+	 * Get flight code
+	 * @return flight code
+	 */
 	public String getCode() {
 		return code;
 	}
 
+	/**
+	 * Get airline name
+	 * @return airline name
+	 */
 	public String getAirlineName() {
 		parseCode(this.code);
 		return airline;
 	}
 
+	/**
+	 * Get departure airport
+	 * @return departure airport
+	 */
 	public String getFrom() {
 		return from;
 	}
 
+	/**
+	 * Get destination airport
+	 * @return destination airport
+	 */
 	public String getTo() {
 		return to;
 	}
 
+	/**
+	 * Get departure date
+	 * @return departure date
+	 */
 	public String getWeekday() {
 		return weekday;
 	}
 
+	/**
+	 * Get departure time 
+	 * @return departure time 
+	 */
 	public String getTime() {
 		return time;
 	}
 
+	/**
+	 * Get available seats
+	 * @return available seats
+	 */
 	public int getSeats() {
 		return seats;
 	}
 
+	/**
+	 * Get cost of per seat
+	 * @return cost of per seat
+	 */
 	public double getCostPerSeat() {
 		return costPerSeat;
 	}
 
+	/**
+	 * Is domestic trip
+	 * @return
+	 */
 	public boolean isDomestic() {
 		if (from.startsWith("Y") && to.startsWith("Y")) {
 			return true;
@@ -72,6 +108,10 @@ public class Flight {
 		}
 	}
 	
+	/**
+	 * Parse code from flight code
+	 * @param code flight code
+	 */
 	private void parseCode(String code) {
 		switch(this.code.split("-")[0]) {
 		case "OA":

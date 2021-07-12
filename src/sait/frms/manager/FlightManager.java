@@ -34,15 +34,25 @@ public class FlightManager {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Read all airports and flights from csv files
+	 */
 	public ArrayList<Flight> getFlights() throws FileNotFoundException {
 		return flights;
 	}
-
+	/**
+	 * Get all flight names
+	 * @return all flight names
+	 * @throws FileNotFoundException if flights.csv file doesn't exist
+	 */
 	public ArrayList<String> getAirports() throws FileNotFoundException {
 		return airports;
 	}
-	
+	/**
+	 * Find airport by code
+	 * @param code	flight code
+	 * @return		airport name
+	 */
 	public String findAirportByCode(String code) {
 		for (int i = 0; i < airports.size(); i++) {
 			if (airports.get(i).equals(code)) {
@@ -51,7 +61,11 @@ public class FlightManager {
 		}
 		return "";
 	}
-	
+	/**
+	 * Find flight by flight code
+	 * @param code	flight code
+	 * @return		found flight object
+	 */
 	public Flight findFlightByCode(String code) {
 		for (Flight f:flights) {
 			if (f.getCode().equalsIgnoreCase(code)) {
@@ -60,7 +74,13 @@ public class FlightManager {
 		}
 		throw new RuntimeException("The code you input doesn't exist in the system. Please enter a new code and try again.");
 	}
-	
+	/**
+	 * Find flights by user selected options
+	 * @param from 		departure airport
+	 * @param to 		destination airport
+	 * @param weekday 	departure date
+	 * @return			those flights meet the specific criteria
+	 */
 	public ArrayList<Flight> findFlights (String from, String to, String weekday) {
 		if (weekday == WEEKDAY_ANY) {
 			for (Flight f : flights) {
@@ -79,7 +99,10 @@ public class FlightManager {
 		}
 		return flightsFound;
 	}
-	
+	/**
+	 * Populate flights from flights.csv file
+	 * @throws FileNotFoundException if flights.csv file doesn't exist
+	 */
 	private void populateFlights() throws FileNotFoundException {
 		Scanner in = new Scanner(new File(FILE_PATH));
 		while (in.hasNext()) {
@@ -94,7 +117,10 @@ public class FlightManager {
 			flights.add(new Flight(code, from, to, weekday, time, seats, costPerSeat));
 		}
 	}
-	
+	/**
+	 * Populate airports from airports.csv file
+	 * @throws FileNotFoundException if the csv file doesn't exist
+	 */
 	private void populateAirports() throws FileNotFoundException {
 		Scanner in = new Scanner(new File(FILE_PATH_AIRPORT));
 		while (in.hasNext()) {
