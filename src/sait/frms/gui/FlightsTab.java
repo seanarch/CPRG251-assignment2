@@ -1,21 +1,16 @@
 package sait.frms.gui;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 
-import sait.frms.manager.FlightManager;
-import sait.frms.manager.ReservationManager;
-import sait.frms.problemdomain.Flight;
-import sait.frms.problemdomain.Reservation;
+import sait.frms.manager.*;
+import sait.frms.problemdomain.*;
 
 /**
  * Holds the components for the flights tab.
@@ -361,7 +356,7 @@ public class FlightsTab extends TabBase {
 			String name = textName.getText();
 			String citizenship = textCitizenship.getText();
 			//client name & citizenship cannot be empty
-			if(!name.isEmpty()&&!citizenship.isEmpty(){
+			if(!name.isEmpty()&&!citizenship.isEmpty()){
 				try {
 				reservations = reservationManager.makeReservation(flightsList.getSelectedValue(), name, citizenship);
 			} catch (IOException e1) {

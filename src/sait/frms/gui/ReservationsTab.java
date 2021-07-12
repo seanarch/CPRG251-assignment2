@@ -1,25 +1,16 @@
 package sait.frms.gui;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.awt.event.*;
+import java.io.*;
+import java.io.*;
+import java.util.*;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 
-//import sait.frms.gui.FlightsTab.MyListSelectionListener;
-//import sait.frms.gui.FlightsTab.MyListSelectionListener;
-//import sait.frms.gui.FlightsTab.MyListSelectionListener;
-import sait.frms.manager.ReservationManager;
-import sait.frms.problemdomain.Flight;
-import sait.frms.problemdomain.Reservation;
+import sait.frms.manager.*;
+import sait.frms.problemdomain.*;
 
 /**
  * Holds the components for the reservations tab.

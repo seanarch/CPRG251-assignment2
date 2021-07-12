@@ -68,7 +68,8 @@ public class Reservation {
 
 	@Override
 	public String toString() {
-		return this.code;
+		return "Reservation [code=" + code + ", flightCode=" + flightCode + ", airline=" + airline + ", name=" + name
+				+ ", citizenship=" + citizenship + ", cost=" + cost + ", isActive=" + active + "]";
 	}
 	
 }
