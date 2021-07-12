@@ -51,7 +51,6 @@ public class FlightsTab extends TabBase {
 	JComboBox comboboxFrom;
 	JComboBox comboboxDay;
 	JPanel textArea;
-	JTextArea result;
 	ArrayList<Flight> flightObject = null;
 	ArrayList<String> airportObject = null;
 	Reservation reservations = null;
@@ -326,7 +325,6 @@ public class FlightsTab extends TabBase {
 			String flightFrom = (String) comboboxFrom.getSelectedItem();
 			String flightTo = (String) comboboxTo.getSelectedItem();
 			String flightDay = (String) comboboxDay.getSelectedItem();
-			 result = new JTextArea();
 						
 			try {
 				flightObject = flightManager.getFlights();
@@ -335,7 +333,7 @@ public class FlightsTab extends TabBase {
 				e1.printStackTrace();
 			}
 
-			flightsModel.removeAllElements();
+			flightsModel.clear();
 			for (Flight fo : flightObject) {
 				if (flightDay.equals(WEEKDAY_ANY)) {
 					if (flightDay.equals(WEEKDAY_ANY) && fo.getFrom().equals(flightFrom) && fo.getTo().equals(flightTo)) {
