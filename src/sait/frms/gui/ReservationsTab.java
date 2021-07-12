@@ -279,6 +279,7 @@ public class ReservationsTab extends TabBase {
 			String reservationCode = textCode.getText().toUpperCase();
 			String airline = textAirlineSearch.getText().toUpperCase();
 			String name = textName.getText().toUpperCase();
+			reservationsModel.clear();
 			if (airline.isEmpty() && name.isEmpty()) {
 				reservationbyCodeRecord = reservationManager.findReservationByCode(reservationCode);
 				reservationsModel.addElement(reservationbyCodeRecord);
